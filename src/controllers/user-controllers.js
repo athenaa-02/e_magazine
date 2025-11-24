@@ -17,6 +17,12 @@ export const getAllUsers = async (req, res) => {
 
 export const createUser = async (req, res) => {
   const { name, email, password } = req.body;
+  const file = req.file;
+
+  if (!file) {
+    return res.status(400).json({ message: "Please upload an avatar image" });
+  }
+  const imageUrl = "/images/" + file.filename;
   try {
     if (!name || !email) {
       return res
@@ -27,7 +33,12 @@ export const createUser = async (req, res) => {
     const salt = await bicrypt.genSalt(10);
     const hashedPassword = await bicrypt.hash(password, salt);
 
-    const newUser = new User({ name, email, password: hashedPassword });
+    const newUser = new User({
+      name,
+      email,
+      password: hashedPassword,
+      image: imageUrl,
+    });
     await newUser.save();
     // try {
     //   await registrationWelcome(email, name);
