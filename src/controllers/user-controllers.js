@@ -40,11 +40,11 @@ export const createUser = async (req, res) => {
       image: imageUrl,
     });
     await newUser.save();
-    // try {
-    //   await registrationWelcome(email, name);
-    // } catch (emailErr) {
-    //   console.error("EMAIL ERROR:", emailErr);
-    // }
+    try {
+      await registrationWelcome(email, name);
+    } catch (emailErr) {
+      console.error("EMAIL ERROR:", emailErr);
+    }
     return res.status(201).json(newUser);
   } catch (err) {
     console.error("USER CREATE ERROR:", err);
